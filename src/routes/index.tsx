@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import quality from "@/assets/quality.jpg";
 import pHoodie from "@/assets/p-hoodie.jpg";
 import pTshirt from "@/assets/p-tshirt.jpg";
@@ -19,22 +20,22 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const navLinks = ["À LA UNE", "QUALITÉ", "COLLECTIONS", "BOUTIQUE", "AVIS"];
+const navLinks = ["À LA UNE", "QUALITÉ", "COLLECTIONS", "BOUTIQUE"];
 
 const collections = [
   { title: "Essentiels Noir", sub: "12 pièces · Automne 26", tag: "7-14 JOURS", img: cNoir },
-  { title: "Sahara Warm", sub: "8 pièces · Édition limitée", tag: "NOUVEAU", img: cSahara },
+  { title: "Sahara Warm", sub: "8 pièces · Édition limitée", tag: "7-14 JOURS", img: cSahara },
   { title: "Medina Blue", sub: "10 pièces · Capsule d'été", tag: "7-14 JOURS", img: cMedina },
-  { title: "Atelier Doré", sub: "6 pièces · Numérotées", tag: "EXCLUSIF", img: cAtelier },
+  { title: "Atelier Doré", sub: "6 pièces · Numérotées", tag: "7-14 JOURS", img: cAtelier },
 ];
 
 const products = [
-  { name: "Hoodie Signature", price: "89 TND", img: pHoodie },
-  { name: "T-shirt Premium", price: "49 TND", img: pTshirt },
-  { name: "Veste Urbaine", price: "149 TND", img: pJacket },
-  { name: "Sneakers Édition", price: "129 TND", img: pSneakers },
-  { name: "Casquette Iconique", price: "39 TND", img: pCap },
-  { name: "Sac Tech", price: "79 TND", img: pBag },
+  { name: "Hoodie Signature", price: "89 TND", img: pHoodie, soldOut: false },
+  { name: "T-shirt Premium", price: "49 TND", img: pTshirt, soldOut: true },
+  { name: "Veste Urbaine", price: "149 TND", img: pJacket, soldOut: false },
+  { name: "Sneakers Édition", price: "129 TND", img: pSneakers, soldOut: false },
+  { name: "Casquette Iconique", price: "39 TND", img: pCap, soldOut: true },
+  { name: "Sac Tech", price: "79 TND", img: pBag, soldOut: false },
 ];
 
 const reviews = [
@@ -43,9 +44,36 @@ const reviews = [
   { q: "Livraison rapide, packaging soigné, produit fidèle aux photos. FLOKY tient ses promesses.", n: "Mehdi R.", l: "Sfax" },
 ];
 
+function DropBanner() {
+  return (
+    <div className="fixed top-0 w-full z-[60] bg-black text-center py-1.5 border-b border-white/10">
+      <div className="flex items-center justify-center gap-2 font-mono text-[11px] tracking-wider text-gray-300">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+        </span>
+        DROP 001 : LIVE
+      </div>
+    </div>
+  );
+}
+
+function FloatingLeft() {
+  return (
+    <div className="hidden md:flex fixed left-6 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-4">
+      <div className="flex flex-col -space-y-3">
+        <img src={a1} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
+        <img src={a2} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
+        <img src={a3} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
+      </div>
+      <button className="w-10 h-10 rounded-full bg-[#171717] border border-white/10 flex items-center justify-center text-gray-300 hover:text-[#D4AF37] transition-colors" aria-label="Lire la vidéo">▶</button>
+    </div>
+  );
+}
+
 function Navbar() {
   return (
-    <nav className="fixed top-0 w-full flex items-center justify-between px-8 py-4 z-50 bg-[#0f0f0f]/80 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-[30px] w-full flex items-center justify-between px-8 py-4 z-50 bg-[#0f0f0f]/80 backdrop-blur-md border-b border-white/10">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full border border-[#D4AF37] flex items-center justify-center text-[#D4AF37] font-serif text-xl">F</div>
         <div className="flex flex-col leading-tight">
@@ -65,7 +93,7 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-24 relative">
+    <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-32 relative">
       <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-xs text-[#D4AF37] mb-6 tracking-widest">✦ TENDANCE</motion.p>
       <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="font-serif text-5xl md:text-7xl text-white mb-6 max-w-4xl leading-tight">
         L'Art de la Rue. <br /> L'Âme de la Tunisie.
@@ -90,11 +118,11 @@ function Quality() {
     { label: "LIVRAISON", value: "7–14 Jours" },
   ];
   return (
-    <section id="QUALITÉ" className="grid grid-cols-1 md:grid-cols-2 min-h-screen items-center px-8 py-20 gap-16 relative max-w-7xl mx-auto">
-      <div className="aspect-[4/5] bg-[#171717] rounded-lg overflow-hidden relative group">
+    <section id="QUALITÉ" className="grid grid-cols-1 md:grid-cols-2 min-h-screen items-center px-8 py-20 gap-16 max-w-7xl mx-auto">
+      <div className="aspect-[4/5] bg-[#171717] rounded-lg overflow-hidden group">
         <img src={quality} alt="Détail du tissu premium FLOKY" width={1024} height={1280} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
       </div>
-      <div className="relative">
+      <div>
         <p className="text-xs text-[#D4AF37] mb-4 tracking-widest">✦ QUALITÉ</p>
         <h2 className="font-serif text-4xl md:text-5xl text-white mb-6 leading-tight">
           Examinez Chaque Détail. <span className="text-[#D4AF37]">De près.</span>
@@ -111,23 +139,43 @@ function Quality() {
           ))}
         </div>
       </div>
-      <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 flex-col items-center gap-3">
-        <div className="flex flex-col -space-y-3">
-          <img src={a1} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
-          <img src={a2} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
-          <img src={a3} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 border-2 border-[#0f0f0f] rounded-full object-cover" />
-        </div>
-        <button className="w-10 h-10 rounded-full bg-[#171717] border border-white/10 flex items-center justify-center text-gray-300 hover:text-[#D4AF37] transition-colors" aria-label="Lire la vidéo">▶</button>
-      </div>
     </section>
+  );
+}
+
+function Countdown() {
+  const [t, setT] = useState({ h: 48, m: 12, s: 0 });
+  useEffect(() => {
+    const i = setInterval(() => {
+      setT((p) => {
+        let s = p.s - 1, m = p.m, h = p.h;
+        if (s < 0) { s = 59; m -= 1; }
+        if (m < 0) { m = 59; h -= 1; }
+        if (h < 0) { h = 48; m = 12; s = 0; }
+        return { h, m, s };
+      });
+    }, 1000);
+    return () => clearInterval(i);
+  }, []);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return (
+    <div className="flex items-center gap-3 text-gray-400 font-mono text-xs tracking-widest">
+      <span className="uppercase">Prochain drop dans :</span>
+      <span className="text-[#D4AF37] text-base">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>
+    </div>
   );
 }
 
 function Collections() {
   return (
     <section id="COLLECTIONS" className="px-8 py-20 max-w-7xl mx-auto">
-      <p className="text-[#D4AF37] text-xs tracking-widest">✦ COLLECTIONS</p>
-      <h2 className="font-serif text-4xl text-white mt-2">Parcourez Nos Galeries</h2>
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <p className="text-[#D4AF37] text-xs tracking-widest">✦ COLLECTIONS</p>
+          <h2 className="font-serif text-4xl text-white mt-2">Parcourez Nos Galeries</h2>
+        </div>
+        <Countdown />
+      </div>
       <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 pt-12 hide-scrollbar">
         {collections.map((c) => (
           <div key={c.title} className="w-[300px] shrink-0 snap-start flex flex-col gap-4">
@@ -154,11 +202,16 @@ function Boutique() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-12">
         {products.map((p) => (
           <div key={p.name} className="group cursor-pointer">
-            <div className="aspect-square bg-[#171717] mb-4 overflow-hidden">
-              <img src={p.img} alt={p.name} width={800} height={800} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="aspect-square bg-[#171717] mb-4 overflow-hidden relative">
+              <img src={p.img} alt={p.name} width={800} height={800} loading="lazy" className={`w-full h-full object-cover transition-transform duration-700 ${p.soldOut ? "opacity-50" : "group-hover:scale-105"}`} />
+              {p.soldOut && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="bg-black/80 text-[#D4AF37] border border-[#D4AF37] px-6 py-2 text-xs font-bold tracking-[0.3em]">ÉPUISÉ</span>
+                </div>
+              )}
             </div>
             <h3 className="font-serif text-lg text-white mb-1">{p.name}</h3>
-            <p className="font-sans text-sm text-gray-400">À partir de {p.price}</p>
+            <p className={`font-sans text-sm ${p.soldOut ? "text-gray-500 line-through" : "text-gray-400"}`}>À partir de {p.price}</p>
           </div>
         ))}
       </div>
@@ -234,8 +287,10 @@ function Footer() {
 function Index() {
   return (
     <div className="bg-[#0f0f0f] text-gray-50 min-h-screen font-sans">
+      <DropBanner />
       <Navbar />
-      <main>
+      <FloatingLeft />
+      <main className="pt-[30px]">
         <Hero />
         <Quality />
         <Collections />
