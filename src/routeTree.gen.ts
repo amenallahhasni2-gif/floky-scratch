@@ -9,51 +9,224 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as ShellIndexRouteImport } from './routes/_shell.index'
+import { Route as ShellContactRouteImport } from './routes/_shell.contact'
+import { Route as ShellCollectionsRouteImport } from './routes/_shell.collections'
+import { Route as ShellBoutiqueRouteImport } from './routes/_shell.boutique'
+import { Route as ShellAboutRouteImport } from './routes/_shell.about'
+import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.$slug'
+import { Route as ShellCollectionsSlugRouteImport } from './routes/_shell.collections.$slug'
 
-const IndexRoute = IndexRouteImport.update({
+const ShellRoute = ShellRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellContactRoute = ShellContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellCollectionsRoute = ShellCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellBoutiqueRoute = ShellBoutiqueRouteImport.update({
+  id: '/boutique',
+  path: '/boutique',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellAboutRoute = ShellAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellProductsSlugRoute = ShellProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellCollectionsSlugRoute = ShellCollectionsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ShellCollectionsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof ShellIndexRoute
+  '/about': typeof ShellAboutRoute
+  '/boutique': typeof ShellBoutiqueRoute
+  '/collections': typeof ShellCollectionsRouteWithChildren
+  '/contact': typeof ShellContactRoute
+  '/collections/$slug': typeof ShellCollectionsSlugRoute
+  '/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/about': typeof ShellAboutRoute
+  '/boutique': typeof ShellBoutiqueRoute
+  '/collections': typeof ShellCollectionsRouteWithChildren
+  '/contact': typeof ShellContactRoute
+  '/': typeof ShellIndexRoute
+  '/collections/$slug': typeof ShellCollectionsSlugRoute
+  '/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_shell': typeof ShellRouteWithChildren
+  '/_shell/about': typeof ShellAboutRoute
+  '/_shell/boutique': typeof ShellBoutiqueRoute
+  '/_shell/collections': typeof ShellCollectionsRouteWithChildren
+  '/_shell/contact': typeof ShellContactRoute
+  '/_shell/': typeof ShellIndexRoute
+  '/_shell/collections/$slug': typeof ShellCollectionsSlugRoute
+  '/_shell/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/boutique'
+    | '/collections'
+    | '/contact'
+    | '/collections/$slug'
+    | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/about'
+    | '/boutique'
+    | '/collections'
+    | '/contact'
+    | '/'
+    | '/collections/$slug'
+    | '/products/$slug'
+  id:
+    | '__root__'
+    | '/_shell'
+    | '/_shell/about'
+    | '/_shell/boutique'
+    | '/_shell/collections'
+    | '/_shell/contact'
+    | '/_shell/'
+    | '/_shell/collections/$slug'
+    | '/_shell/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  ShellRoute: typeof ShellRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/': {
+      id: '/_shell/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ShellIndexRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/contact': {
+      id: '/_shell/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ShellContactRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/collections': {
+      id: '/_shell/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof ShellCollectionsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/boutique': {
+      id: '/_shell/boutique'
+      path: '/boutique'
+      fullPath: '/boutique'
+      preLoaderRoute: typeof ShellBoutiqueRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/about': {
+      id: '/_shell/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof ShellAboutRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/products/$slug': {
+      id: '/_shell/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ShellProductsSlugRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/collections/$slug': {
+      id: '/_shell/collections/$slug'
+      path: '/$slug'
+      fullPath: '/collections/$slug'
+      preLoaderRoute: typeof ShellCollectionsSlugRouteImport
+      parentRoute: typeof ShellCollectionsRoute
     }
   }
 }
 
+interface ShellCollectionsRouteChildren {
+  ShellCollectionsSlugRoute: typeof ShellCollectionsSlugRoute
+}
+
+const ShellCollectionsRouteChildren: ShellCollectionsRouteChildren = {
+  ShellCollectionsSlugRoute: ShellCollectionsSlugRoute,
+}
+
+const ShellCollectionsRouteWithChildren =
+  ShellCollectionsRoute._addFileChildren(ShellCollectionsRouteChildren)
+
+interface ShellRouteChildren {
+  ShellAboutRoute: typeof ShellAboutRoute
+  ShellBoutiqueRoute: typeof ShellBoutiqueRoute
+  ShellCollectionsRoute: typeof ShellCollectionsRouteWithChildren
+  ShellContactRoute: typeof ShellContactRoute
+  ShellIndexRoute: typeof ShellIndexRoute
+  ShellProductsSlugRoute: typeof ShellProductsSlugRoute
+}
+
+const ShellRouteChildren: ShellRouteChildren = {
+  ShellAboutRoute: ShellAboutRoute,
+  ShellBoutiqueRoute: ShellBoutiqueRoute,
+  ShellCollectionsRoute: ShellCollectionsRouteWithChildren,
+  ShellContactRoute: ShellContactRoute,
+  ShellIndexRoute: ShellIndexRoute,
+  ShellProductsSlugRoute: ShellProductsSlugRoute,
+}
+
+const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  ShellRoute: ShellRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
