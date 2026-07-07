@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "À LA UNE", to: "/" as const },
-  { label: "QUALITÉ", to: "/" as const, hash: "QUALITÉ" },
   { label: "COLLECTIONS", to: "/collections" as const },
   { label: "BOUTIQUE", to: "/boutique" as const },
 ];
 
 export function Navbar() {
+  const { count, setOpen } = useCart();
+
   return (
     <nav className="fixed top-[30px] w-full flex items-center justify-between px-8 py-4 z-50 bg-[#0f0f0f]/80 backdrop-blur-md border-b border-white/10">
       <Link to="/" className="flex items-center gap-3">
@@ -22,19 +24,26 @@ export function Navbar() {
           <Link
             key={l.label}
             to={l.to}
-            hash={l.hash}
             className="text-xs uppercase tracking-wider text-gray-300 hover:text-[#D4AF37] transition-colors"
           >
             {l.label}
           </Link>
         ))}
       </div>
-      <Link
-        to="/boutique"
-        className="bg-[#D4AF37] text-black px-6 py-2 rounded-full text-xs font-bold tracking-wide hover:bg-white transition-colors"
-      >
-        ✦ COMMENCER
-      </Link>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setOpen(true)}
+          className="relative bg-[#171717] border border-white/10 text-gray-200 hover:text-[#D4AF37] hover:border-[#D4AF37]/40 px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-colors"
+          aria-label="Ouvrir le panier"
+        >
+          PANIER
+          {count > 0 && (
+            <span className="absolute -top-1 -right-1 bg-[#D4AF37] text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {count}
+            </span>
+          )}
+        </button>
+      </div>
     </nav>
   );
 }
