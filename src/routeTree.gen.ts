@@ -16,6 +16,7 @@ import { Route as ShellCollectionsRouteImport } from './routes/_shell.collection
 import { Route as ShellCheckoutRouteImport } from './routes/_shell.checkout'
 import { Route as ShellCartRouteImport } from './routes/_shell.cart'
 import { Route as ShellBoutiqueRouteImport } from './routes/_shell.boutique'
+import { Route as ShellAuthRouteImport } from './routes/_shell.auth'
 import { Route as ShellAboutRouteImport } from './routes/_shell.about'
 import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.$slug'
 import { Route as ShellCollectionsSlugRouteImport } from './routes/_shell.collections.$slug'
@@ -55,6 +56,11 @@ const ShellBoutiqueRoute = ShellBoutiqueRouteImport.update({
   path: '/boutique',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellAuthRoute = ShellAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellAboutRoute = ShellAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -79,6 +85,7 @@ const ShellCheckoutSuccessRoute = ShellCheckoutSuccessRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
   '/about': typeof ShellAboutRoute
+  '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
   '/cart': typeof ShellCartRoute
   '/checkout': typeof ShellCheckoutRouteWithChildren
@@ -90,6 +97,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/about': typeof ShellAboutRoute
+  '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
   '/cart': typeof ShellCartRoute
   '/checkout': typeof ShellCheckoutRouteWithChildren
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_shell': typeof ShellRouteWithChildren
   '/_shell/about': typeof ShellAboutRoute
+  '/_shell/auth': typeof ShellAuthRoute
   '/_shell/boutique': typeof ShellBoutiqueRoute
   '/_shell/cart': typeof ShellCartRoute
   '/_shell/checkout': typeof ShellCheckoutRouteWithChildren
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
     | '/boutique'
     | '/cart'
     | '/checkout'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
+    | '/auth'
     | '/boutique'
     | '/cart'
     | '/checkout'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_shell'
     | '/_shell/about'
+    | '/_shell/auth'
     | '/_shell/boutique'
     | '/_shell/cart'
     | '/_shell/checkout'
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellBoutiqueRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/auth': {
+      id: '/_shell/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof ShellAuthRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/about': {
       id: '/_shell/about'
       path: '/about'
@@ -265,6 +284,7 @@ const ShellCollectionsRouteWithChildren =
 
 interface ShellRouteChildren {
   ShellAboutRoute: typeof ShellAboutRoute
+  ShellAuthRoute: typeof ShellAuthRoute
   ShellBoutiqueRoute: typeof ShellBoutiqueRoute
   ShellCartRoute: typeof ShellCartRoute
   ShellCheckoutRoute: typeof ShellCheckoutRouteWithChildren
@@ -276,6 +296,7 @@ interface ShellRouteChildren {
 
 const ShellRouteChildren: ShellRouteChildren = {
   ShellAboutRoute: ShellAboutRoute,
+  ShellAuthRoute: ShellAuthRoute,
   ShellBoutiqueRoute: ShellBoutiqueRoute,
   ShellCartRoute: ShellCartRoute,
   ShellCheckoutRoute: ShellCheckoutRouteWithChildren,
@@ -293,13 +314,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
