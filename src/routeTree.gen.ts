@@ -13,10 +13,13 @@ import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
 import { Route as ShellContactRouteImport } from './routes/_shell.contact'
 import { Route as ShellCollectionsRouteImport } from './routes/_shell.collections'
+import { Route as ShellCheckoutRouteImport } from './routes/_shell.checkout'
+import { Route as ShellCartRouteImport } from './routes/_shell.cart'
 import { Route as ShellBoutiqueRouteImport } from './routes/_shell.boutique'
 import { Route as ShellAboutRouteImport } from './routes/_shell.about'
 import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.$slug'
 import { Route as ShellCollectionsSlugRouteImport } from './routes/_shell.collections.$slug'
+import { Route as ShellCheckoutSuccessRouteImport } from './routes/_shell.checkout.success'
 
 const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
@@ -35,6 +38,16 @@ const ShellContactRoute = ShellContactRouteImport.update({
 const ShellCollectionsRoute = ShellCollectionsRouteImport.update({
   id: '/collections',
   path: '/collections',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellCheckoutRoute = ShellCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellCartRoute = ShellCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellBoutiqueRoute = ShellBoutiqueRouteImport.update({
@@ -57,22 +70,33 @@ const ShellCollectionsSlugRoute = ShellCollectionsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ShellCollectionsRoute,
 } as any)
+const ShellCheckoutSuccessRoute = ShellCheckoutSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => ShellCheckoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
   '/about': typeof ShellAboutRoute
   '/boutique': typeof ShellBoutiqueRoute
+  '/cart': typeof ShellCartRoute
+  '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
+  '/checkout/success': typeof ShellCheckoutSuccessRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
   '/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof ShellAboutRoute
   '/boutique': typeof ShellBoutiqueRoute
+  '/cart': typeof ShellCartRoute
+  '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
   '/': typeof ShellIndexRoute
+  '/checkout/success': typeof ShellCheckoutSuccessRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
   '/products/$slug': typeof ShellProductsSlugRoute
 }
@@ -81,9 +105,12 @@ export interface FileRoutesById {
   '/_shell': typeof ShellRouteWithChildren
   '/_shell/about': typeof ShellAboutRoute
   '/_shell/boutique': typeof ShellBoutiqueRoute
+  '/_shell/cart': typeof ShellCartRoute
+  '/_shell/checkout': typeof ShellCheckoutRouteWithChildren
   '/_shell/collections': typeof ShellCollectionsRouteWithChildren
   '/_shell/contact': typeof ShellContactRoute
   '/_shell/': typeof ShellIndexRoute
+  '/_shell/checkout/success': typeof ShellCheckoutSuccessRoute
   '/_shell/collections/$slug': typeof ShellCollectionsSlugRoute
   '/_shell/products/$slug': typeof ShellProductsSlugRoute
 }
@@ -93,17 +120,23 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/boutique'
+    | '/cart'
+    | '/checkout'
     | '/collections'
     | '/contact'
+    | '/checkout/success'
     | '/collections/$slug'
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
     | '/boutique'
+    | '/cart'
+    | '/checkout'
     | '/collections'
     | '/contact'
     | '/'
+    | '/checkout/success'
     | '/collections/$slug'
     | '/products/$slug'
   id:
@@ -111,9 +144,12 @@ export interface FileRouteTypes {
     | '/_shell'
     | '/_shell/about'
     | '/_shell/boutique'
+    | '/_shell/cart'
+    | '/_shell/checkout'
     | '/_shell/collections'
     | '/_shell/contact'
     | '/_shell/'
+    | '/_shell/checkout/success'
     | '/_shell/collections/$slug'
     | '/_shell/products/$slug'
   fileRoutesById: FileRoutesById
@@ -152,6 +188,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellCollectionsRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/checkout': {
+      id: '/_shell/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof ShellCheckoutRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/cart': {
+      id: '/_shell/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof ShellCartRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/boutique': {
       id: '/_shell/boutique'
       path: '/boutique'
@@ -180,8 +230,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellCollectionsSlugRouteImport
       parentRoute: typeof ShellCollectionsRoute
     }
+    '/_shell/checkout/success': {
+      id: '/_shell/checkout/success'
+      path: '/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof ShellCheckoutSuccessRouteImport
+      parentRoute: typeof ShellCheckoutRoute
+    }
   }
 }
+
+interface ShellCheckoutRouteChildren {
+  ShellCheckoutSuccessRoute: typeof ShellCheckoutSuccessRoute
+}
+
+const ShellCheckoutRouteChildren: ShellCheckoutRouteChildren = {
+  ShellCheckoutSuccessRoute: ShellCheckoutSuccessRoute,
+}
+
+const ShellCheckoutRouteWithChildren = ShellCheckoutRoute._addFileChildren(
+  ShellCheckoutRouteChildren,
+)
 
 interface ShellCollectionsRouteChildren {
   ShellCollectionsSlugRoute: typeof ShellCollectionsSlugRoute
@@ -197,6 +266,8 @@ const ShellCollectionsRouteWithChildren =
 interface ShellRouteChildren {
   ShellAboutRoute: typeof ShellAboutRoute
   ShellBoutiqueRoute: typeof ShellBoutiqueRoute
+  ShellCartRoute: typeof ShellCartRoute
+  ShellCheckoutRoute: typeof ShellCheckoutRouteWithChildren
   ShellCollectionsRoute: typeof ShellCollectionsRouteWithChildren
   ShellContactRoute: typeof ShellContactRoute
   ShellIndexRoute: typeof ShellIndexRoute
@@ -206,6 +277,8 @@ interface ShellRouteChildren {
 const ShellRouteChildren: ShellRouteChildren = {
   ShellAboutRoute: ShellAboutRoute,
   ShellBoutiqueRoute: ShellBoutiqueRoute,
+  ShellCartRoute: ShellCartRoute,
+  ShellCheckoutRoute: ShellCheckoutRouteWithChildren,
   ShellCollectionsRoute: ShellCollectionsRouteWithChildren,
   ShellContactRoute: ShellContactRoute,
   ShellIndexRoute: ShellIndexRoute,
@@ -220,13 +293,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

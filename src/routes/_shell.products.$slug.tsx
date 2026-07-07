@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getProductBySlug } from "@/data/products";
 import { getCollectionBySlug } from "@/data/collections";
+import { useCart, parsePrice } from "@/context/CartContext";
 
 export const Route = createFileRoute("/_shell/products/$slug")({
   component: ProductDetailPage,
@@ -9,12 +10,19 @@ export const Route = createFileRoute("/_shell/products/$slug")({
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = getProductBySlug(slug);
+  const { add, setOpen } = useCart();
 
   if (!product) {
     throw notFound();
   }
 
   const collection = getCollectionBySlug(product.collectionSlug);
+
+  function handleAdd() {
+    if (!product || product.soldOut) return;
+    add({ slug: product.slug, name: product.name, price: parsePrice(product.price), img: product.img });
+    setOpen(true);
+  }
 
   return (
     <section className="px-8 py-20 max-w-7xl mx-auto">
@@ -48,6 +56,7 @@ function ProductDetailPage() {
             Pièce premium confectionnée dans nos ateliers tunisiens. Matières nobles, coupe soignée et finitions irréprochables — l'essence du streetwear FLOKY.
           </p>
           <button
+            onClick={handleAdd}
             disabled={product.soldOut}
             className="bg-[#D4AF37] text-black px-8 py-3 rounded-full text-xs font-bold tracking-wide hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#D4AF37]"
           >
