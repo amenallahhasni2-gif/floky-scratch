@@ -80,7 +80,7 @@ export function FloatingRight() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-medium text-gray-100 truncate">{d.title}</p>
+                  <p className="text-[11px] font-medium text-gray-100 truncate">{d.name}</p>
                   <p className="text-[9px] uppercase tracking-wider text-gray-500">
                     {d.status === "live" ? (
                       <span className="text-red-400">● LIVE</span>
