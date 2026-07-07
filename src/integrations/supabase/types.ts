@@ -34,27 +34,88 @@ export type Database = {
       }
       categories: {
         Row: {
+          collection_id: string | null
           created_at: string
           display_order: number
           id: string
           name: string
           slug: string
+          sort_order: number
+          title: string | null
         }
         Insert: {
+          collection_id?: string | null
           created_at?: string
           display_order?: number
           id?: string
           name: string
           slug: string
+          sort_order?: number
+          title?: string | null
         }
         Update: {
+          collection_id?: string | null
           created_at?: string
           display_order?: number
           id?: string
           name?: string
           slug?: string
+          sort_order?: number
+          title?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          created_at: string
+          drop_id: string | null
+          id: string
+          image_url: string | null
+          slug: string
+          sort_order: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          drop_id?: string | null
+          id?: string
+          image_url?: string | null
+          slug: string
+          sort_order?: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          drop_id?: string | null
+          id?: string
+          image_url?: string | null
+          slug?: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collections_drop_id_fkey"
+            columns: ["drop_id"]
+            isOneToOne: false
+            referencedRelation: "drops"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       delivery_fees: {
         Row: {
@@ -87,6 +148,7 @@ export type Database = {
           description: string | null
           display_order: number
           end_date: string | null
+          ends_at: string | null
           id: string
           is_archived: boolean
           is_live: boolean
@@ -94,6 +156,9 @@ export type Database = {
           name: string
           release_date: string | null
           slug: string
+          sort_order: number
+          starts_at: string | null
+          status: string
           tagline: string | null
           updated_at: string
         }
@@ -103,6 +168,7 @@ export type Database = {
           description?: string | null
           display_order?: number
           end_date?: string | null
+          ends_at?: string | null
           id?: string
           is_archived?: boolean
           is_live?: boolean
@@ -110,6 +176,9 @@ export type Database = {
           name: string
           release_date?: string | null
           slug: string
+          sort_order?: number
+          starts_at?: string | null
+          status?: string
           tagline?: string | null
           updated_at?: string
         }
@@ -119,6 +188,7 @@ export type Database = {
           description?: string | null
           display_order?: number
           end_date?: string | null
+          ends_at?: string | null
           id?: string
           is_archived?: boolean
           is_live?: boolean
@@ -126,6 +196,9 @@ export type Database = {
           name?: string
           release_date?: string | null
           slug?: string
+          sort_order?: number
+          starts_at?: string | null
+          status?: string
           tagline?: string | null
           updated_at?: string
         }
@@ -261,6 +334,38 @@ export type Database = {
         }
         Relationships: []
       }
+      product_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          product_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          product_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          product_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_variants: {
         Row: {
           color: string | null
@@ -322,6 +427,7 @@ export type Database = {
           name: string
           price: number
           slug: string
+          sold_out: boolean
           updated_at: string
         }
         Insert: {
@@ -340,6 +446,7 @@ export type Database = {
           name: string
           price: number
           slug: string
+          sold_out?: boolean
           updated_at?: string
         }
         Update: {
@@ -358,6 +465,7 @@ export type Database = {
           name?: string
           price?: number
           slug?: string
+          sold_out?: boolean
           updated_at?: string
         }
         Relationships: [
