@@ -13,6 +13,7 @@ import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
 import { Route as ShellContactRouteImport } from './routes/_shell.contact'
 import { Route as ShellCollectionsRouteImport } from './routes/_shell.collections'
+import { Route as ShellCartRouteImport } from './routes/_shell.cart'
 import { Route as ShellBoutiqueRouteImport } from './routes/_shell.boutique'
 import { Route as ShellAboutRouteImport } from './routes/_shell.about'
 import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.$slug'
@@ -35,6 +36,11 @@ const ShellContactRoute = ShellContactRouteImport.update({
 const ShellCollectionsRoute = ShellCollectionsRouteImport.update({
   id: '/collections',
   path: '/collections',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellCartRoute = ShellCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellBoutiqueRoute = ShellBoutiqueRouteImport.update({
@@ -62,6 +68,7 @@ export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
   '/about': typeof ShellAboutRoute
   '/boutique': typeof ShellBoutiqueRoute
+  '/cart': typeof ShellCartRoute
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/about': typeof ShellAboutRoute
   '/boutique': typeof ShellBoutiqueRoute
+  '/cart': typeof ShellCartRoute
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
   '/': typeof ShellIndexRoute
@@ -81,6 +89,7 @@ export interface FileRoutesById {
   '/_shell': typeof ShellRouteWithChildren
   '/_shell/about': typeof ShellAboutRoute
   '/_shell/boutique': typeof ShellBoutiqueRoute
+  '/_shell/cart': typeof ShellCartRoute
   '/_shell/collections': typeof ShellCollectionsRouteWithChildren
   '/_shell/contact': typeof ShellContactRoute
   '/_shell/': typeof ShellIndexRoute
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/boutique'
+    | '/cart'
     | '/collections'
     | '/contact'
     | '/collections/$slug'
@@ -101,6 +111,7 @@ export interface FileRouteTypes {
   to:
     | '/about'
     | '/boutique'
+    | '/cart'
     | '/collections'
     | '/contact'
     | '/'
@@ -111,6 +122,7 @@ export interface FileRouteTypes {
     | '/_shell'
     | '/_shell/about'
     | '/_shell/boutique'
+    | '/_shell/cart'
     | '/_shell/collections'
     | '/_shell/contact'
     | '/_shell/'
@@ -150,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/collections'
       fullPath: '/collections'
       preLoaderRoute: typeof ShellCollectionsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/cart': {
+      id: '/_shell/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof ShellCartRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/boutique': {
@@ -197,6 +216,7 @@ const ShellCollectionsRouteWithChildren =
 interface ShellRouteChildren {
   ShellAboutRoute: typeof ShellAboutRoute
   ShellBoutiqueRoute: typeof ShellBoutiqueRoute
+  ShellCartRoute: typeof ShellCartRoute
   ShellCollectionsRoute: typeof ShellCollectionsRouteWithChildren
   ShellContactRoute: typeof ShellContactRoute
   ShellIndexRoute: typeof ShellIndexRoute
@@ -206,6 +226,7 @@ interface ShellRouteChildren {
 const ShellRouteChildren: ShellRouteChildren = {
   ShellAboutRoute: ShellAboutRoute,
   ShellBoutiqueRoute: ShellBoutiqueRoute,
+  ShellCartRoute: ShellCartRoute,
   ShellCollectionsRoute: ShellCollectionsRouteWithChildren,
   ShellContactRoute: ShellContactRoute,
   ShellIndexRoute: ShellIndexRoute,
