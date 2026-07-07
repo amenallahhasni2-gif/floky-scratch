@@ -5,14 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 type Drop = {
   id: string;
   slug: string;
-  title: string;
+  name: string;
   status: string;
   cover_image: string | null;
 };
 
 const FALLBACK: Drop[] = [
-  { id: "f1", slug: "drop-001", title: "DROP 001", status: "live", cover_image: null },
-  { id: "f2", slug: "drop-002", title: "DROP 002", status: "upcoming", cover_image: null },
+  { id: "f1", slug: "drop-001", name: "DROP 001", status: "live", cover_image: null },
+  { id: "f2", slug: "drop-002", name: "DROP 002", status: "upcoming", cover_image: null },
 ];
 
 export function FloatingRight() {
@@ -23,12 +23,12 @@ export function FloatingRight() {
     let mounted = true;
     supabase
       .from("drops")
-      .select("id, slug, title, status, cover_image")
+      .select("id, slug, name, status, cover_image")
       .in("status", ["live", "upcoming", "paused"])
       .order("sort_order", { ascending: true })
       .limit(5)
       .then(({ data }) => {
-        if (mounted && data && data.length) setDrops(data as Drop[]);
+        if (mounted && data && data.length) setDrops(data as unknown as Drop[]);
       });
     return () => {
       mounted = false;
