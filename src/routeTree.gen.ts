@@ -9,26 +9,69 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminDropsRouteImport } from './routes/admin.drops'
+import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as ShellContactRouteImport } from './routes/_shell.contact'
 import { Route as ShellCollectionsRouteImport } from './routes/_shell.collections'
 import { Route as ShellCheckoutRouteImport } from './routes/_shell.checkout'
 import { Route as ShellCartRouteImport } from './routes/_shell.cart'
 import { Route as ShellBoutiqueRouteImport } from './routes/_shell.boutique'
+import { Route as ShellAuthRouteImport } from './routes/_shell.auth'
 import { Route as ShellAboutRouteImport } from './routes/_shell.about'
 import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.$slug'
 import { Route as ShellCollectionsSlugRouteImport } from './routes/_shell.collections.$slug'
 import { Route as ShellCheckoutSuccessRouteImport } from './routes/_shell.checkout.success'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ShellRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDropsRoute = AdminDropsRouteImport.update({
+  id: '/drops',
+  path: '/drops',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCollectionsRoute = AdminCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ShellContactRoute = ShellContactRouteImport.update({
   id: '/contact',
@@ -55,6 +98,11 @@ const ShellBoutiqueRoute = ShellBoutiqueRouteImport.update({
   path: '/boutique',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellAuthRoute = ShellAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellAboutRoute = ShellAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -78,24 +126,39 @@ const ShellCheckoutSuccessRoute = ShellCheckoutSuccessRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/about': typeof ShellAboutRoute
+  '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
   '/cart': typeof ShellCartRoute
   '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
+  '/admin/drops': typeof AdminDropsRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/': typeof AdminIndexRoute
   '/checkout/success': typeof ShellCheckoutSuccessRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
   '/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof ShellAboutRoute
+  '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
   '/cart': typeof ShellCartRoute
   '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
+  '/admin/drops': typeof AdminDropsRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/products': typeof AdminProductsRoute
   '/': typeof ShellIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/checkout/success': typeof ShellCheckoutSuccessRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
   '/products/$slug': typeof ShellProductsSlugRoute
@@ -103,13 +166,21 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_shell': typeof ShellRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
   '/_shell/about': typeof ShellAboutRoute
+  '/_shell/auth': typeof ShellAuthRoute
   '/_shell/boutique': typeof ShellBoutiqueRoute
   '/_shell/cart': typeof ShellCartRoute
   '/_shell/checkout': typeof ShellCheckoutRouteWithChildren
   '/_shell/collections': typeof ShellCollectionsRouteWithChildren
   '/_shell/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
+  '/admin/drops': typeof AdminDropsRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/products': typeof AdminProductsRoute
   '/_shell/': typeof ShellIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/_shell/checkout/success': typeof ShellCheckoutSuccessRoute
   '/_shell/collections/$slug': typeof ShellCollectionsSlugRoute
   '/_shell/products/$slug': typeof ShellProductsSlugRoute
@@ -118,37 +189,60 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/about'
+    | '/auth'
     | '/boutique'
     | '/cart'
     | '/checkout'
     | '/collections'
     | '/contact'
+    | '/admin/categories'
+    | '/admin/collections'
+    | '/admin/drops'
+    | '/admin/orders'
+    | '/admin/products'
+    | '/admin/'
     | '/checkout/success'
     | '/collections/$slug'
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
+    | '/auth'
     | '/boutique'
     | '/cart'
     | '/checkout'
     | '/collections'
     | '/contact'
+    | '/admin/categories'
+    | '/admin/collections'
+    | '/admin/drops'
+    | '/admin/orders'
+    | '/admin/products'
     | '/'
+    | '/admin'
     | '/checkout/success'
     | '/collections/$slug'
     | '/products/$slug'
   id:
     | '__root__'
     | '/_shell'
+    | '/admin'
     | '/_shell/about'
+    | '/_shell/auth'
     | '/_shell/boutique'
     | '/_shell/cart'
     | '/_shell/checkout'
     | '/_shell/collections'
     | '/_shell/contact'
+    | '/admin/categories'
+    | '/admin/collections'
+    | '/admin/drops'
+    | '/admin/orders'
+    | '/admin/products'
     | '/_shell/'
+    | '/admin/'
     | '/_shell/checkout/success'
     | '/_shell/collections/$slug'
     | '/_shell/products/$slug'
@@ -156,10 +250,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ShellRoute: typeof ShellRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_shell': {
       id: '/_shell'
       path: ''
@@ -167,12 +269,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_shell/': {
       id: '/_shell/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof ShellIndexRouteImport
       parentRoute: typeof ShellRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/drops': {
+      id: '/admin/drops'
+      path: '/drops'
+      fullPath: '/admin/drops'
+      preLoaderRoute: typeof AdminDropsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/collections': {
+      id: '/admin/collections'
+      path: '/collections'
+      fullPath: '/admin/collections'
+      preLoaderRoute: typeof AdminCollectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/_shell/contact': {
       id: '/_shell/contact'
@@ -207,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/boutique'
       fullPath: '/boutique'
       preLoaderRoute: typeof ShellBoutiqueRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/auth': {
+      id: '/_shell/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof ShellAuthRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/about': {
@@ -265,6 +416,7 @@ const ShellCollectionsRouteWithChildren =
 
 interface ShellRouteChildren {
   ShellAboutRoute: typeof ShellAboutRoute
+  ShellAuthRoute: typeof ShellAuthRoute
   ShellBoutiqueRoute: typeof ShellBoutiqueRoute
   ShellCartRoute: typeof ShellCartRoute
   ShellCheckoutRoute: typeof ShellCheckoutRouteWithChildren
@@ -276,6 +428,7 @@ interface ShellRouteChildren {
 
 const ShellRouteChildren: ShellRouteChildren = {
   ShellAboutRoute: ShellAboutRoute,
+  ShellAuthRoute: ShellAuthRoute,
   ShellBoutiqueRoute: ShellBoutiqueRoute,
   ShellCartRoute: ShellCartRoute,
   ShellCheckoutRoute: ShellCheckoutRouteWithChildren,
@@ -287,8 +440,29 @@ const ShellRouteChildren: ShellRouteChildren = {
 
 const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 
+interface AdminRouteChildren {
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCollectionsRoute: typeof AdminCollectionsRoute
+  AdminDropsRoute: typeof AdminDropsRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCollectionsRoute: AdminCollectionsRoute,
+  AdminDropsRoute: AdminDropsRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   ShellRoute: ShellRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
