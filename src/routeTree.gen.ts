@@ -15,6 +15,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
 import { Route as AdminDropsRouteImport } from './routes/admin.drops'
 import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as ShellContactRouteImport } from './routes/_shell.contact'
 import { Route as ShellCollectionsRouteImport } from './routes/_shell.collections'
 import { Route as ShellCheckoutRouteImport } from './routes/_shell.checkout'
@@ -53,6 +54,11 @@ const AdminDropsRoute = AdminDropsRouteImport.update({
 const AdminCollectionsRoute = AdminCollectionsRouteImport.update({
   id: '/collections',
   path: '/collections',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
 const ShellContactRoute = ShellContactRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
   '/admin/': typeof AdminIndexRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof ShellCheckoutRouteWithChildren
   '/collections': typeof ShellCollectionsRouteWithChildren
   '/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
   '/': typeof ShellIndexRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/_shell/checkout': typeof ShellCheckoutRouteWithChildren
   '/_shell/collections': typeof ShellCollectionsRouteWithChildren
   '/_shell/contact': typeof ShellContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
   '/_shell/': typeof ShellIndexRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/collections'
     | '/contact'
+    | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
     | '/admin/'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/collections'
     | '/contact'
+    | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
     | '/'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/_shell/checkout'
     | '/_shell/collections'
     | '/_shell/contact'
+    | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
     | '/_shell/'
@@ -259,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/collections'
       fullPath: '/admin/collections'
       preLoaderRoute: typeof AdminCollectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/_shell/contact': {
@@ -384,12 +403,14 @@ const ShellRouteChildren: ShellRouteChildren = {
 const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 
 interface AdminRouteChildren {
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCollectionsRoute: typeof AdminCollectionsRoute
   AdminDropsRoute: typeof AdminDropsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCollectionsRoute: AdminCollectionsRoute,
   AdminDropsRoute: AdminDropsRoute,
   AdminIndexRoute: AdminIndexRoute,
