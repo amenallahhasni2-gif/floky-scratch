@@ -13,6 +13,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminDropsRouteImport } from './routes/admin.drops'
 import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
@@ -45,6 +46,11 @@ const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ShellRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminDropsRoute = AdminDropsRouteImport.update({
   id: '/drops',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
+  '/admin/products': typeof AdminProductsRoute
   '/admin/': typeof AdminIndexRoute
   '/checkout/success': typeof ShellCheckoutSuccessRoute
   '/collections/$slug': typeof ShellCollectionsSlugRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
+  '/admin/products': typeof AdminProductsRoute
   '/': typeof ShellIndexRoute
   '/admin': typeof AdminIndexRoute
   '/checkout/success': typeof ShellCheckoutSuccessRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/collections': typeof AdminCollectionsRoute
   '/admin/drops': typeof AdminDropsRoute
+  '/admin/products': typeof AdminProductsRoute
   '/_shell/': typeof ShellIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_shell/checkout/success': typeof ShellCheckoutSuccessRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
+    | '/admin/products'
     | '/admin/'
     | '/checkout/success'
     | '/collections/$slug'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
+    | '/admin/products'
     | '/'
     | '/admin'
     | '/checkout/success'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/collections'
     | '/admin/drops'
+    | '/admin/products'
     | '/_shell/'
     | '/admin/'
     | '/_shell/checkout/success'
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof ShellIndexRouteImport
       parentRoute: typeof ShellRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/drops': {
       id: '/admin/drops'
@@ -406,6 +425,7 @@ interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCollectionsRoute: typeof AdminCollectionsRoute
   AdminDropsRoute: typeof AdminDropsRoute
+  AdminProductsRoute: typeof AdminProductsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -413,6 +433,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCollectionsRoute: AdminCollectionsRoute,
   AdminDropsRoute: AdminDropsRoute,
+  AdminProductsRoute: AdminProductsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
