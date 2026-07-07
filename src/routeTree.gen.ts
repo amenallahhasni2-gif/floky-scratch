@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ShellIndexRouteImport } from './routes/_shell.index'
 import { Route as ShellContactRouteImport } from './routes/_shell.contact'
@@ -22,6 +23,11 @@ import { Route as ShellProductsSlugRouteImport } from './routes/_shell.products.
 import { Route as ShellCollectionsSlugRouteImport } from './routes/_shell.collections.$slug'
 import { Route as ShellCheckoutSuccessRouteImport } from './routes/_shell.checkout.success'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
   getParentRoute: () => rootRouteImport,
@@ -84,6 +90,7 @@ const ShellCheckoutSuccessRoute = ShellCheckoutSuccessRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
+  '/admin': typeof AdminRoute
   '/about': typeof ShellAboutRoute
   '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/products/$slug': typeof ShellProductsSlugRoute
 }
 export interface FileRoutesByTo {
+  '/admin': typeof AdminRoute
   '/about': typeof ShellAboutRoute
   '/auth': typeof ShellAuthRoute
   '/boutique': typeof ShellBoutiqueRoute
@@ -111,6 +119,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_shell': typeof ShellRouteWithChildren
+  '/admin': typeof AdminRoute
   '/_shell/about': typeof ShellAboutRoute
   '/_shell/auth': typeof ShellAuthRoute
   '/_shell/boutique': typeof ShellBoutiqueRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/about'
     | '/auth'
     | '/boutique'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/admin'
     | '/about'
     | '/auth'
     | '/boutique'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_shell'
+    | '/admin'
     | '/_shell/about'
     | '/_shell/auth'
     | '/_shell/boutique'
@@ -168,10 +180,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ShellRoute: typeof ShellRouteWithChildren
+  AdminRoute: typeof AdminRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_shell': {
       id: '/_shell'
       path: ''
@@ -310,6 +330,7 @@ const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   ShellRoute: ShellRouteWithChildren,
+  AdminRoute: AdminRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
